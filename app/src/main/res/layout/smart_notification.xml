@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/sn_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/sn_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="0.25"
+            android:src="@mipmap/ic_launcher"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.25"
+            android:background="@color/cardview_light_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sn_title1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_toRightOf="@id/sn_icon"
+                android:layout_weight="0.4"
+                android:background="@color/azure"
+                android:text="title1"
+                android:textAlignment="center"
+                android:textColor="#000"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/sn_value1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:ems="10"
+                android:inputType="numberSigned"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.25"
+            android:background="@color/cardview_light_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sn_title2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_toRightOf="@id/sn_icon"
+                android:layout_weight="0.4"
+                android:background="@color/azure"
+                android:text="title2"
+                android:textAlignment="center"
+                android:textColor="#000"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/sn_NewStoriesValue"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.60"
+                android:ems="10"
+                android:inputType="numberSigned"
+                android:text="0"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:autoSizeTextType="uniform" />
+
+            <!--android:onClick="onClickNotification"/>-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:background="@color/cardview_light_background"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="right">
+
+                <ImageView
+                    android:id="@+id/sn_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:background="@color/azure"
+                    app:srcCompat="@drawable/ic_refresh" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/sn_button1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:layout_weight="0.5"
+                    android:background="@color/azure"
+                    android:text="B1"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/sn_button2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:layout_weight="0.5"
+                    android:background="@color/azure"
+                    android:text="B2"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--  <com.google.android.gms.ads.AdView
+        android:id="@+id/adView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="@string/banner_ad_unit_id">
+
+    </com.google.android.gms.ads.AdView>
+-->
+
+</LinearLayout>
