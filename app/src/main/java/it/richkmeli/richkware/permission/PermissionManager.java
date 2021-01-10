@@ -1,11 +1,13 @@
 package it.richkmeli.richkware.permission;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -19,24 +21,26 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.richkmeli.richkware.R;
 
 import static android.provider.Settings.canDrawOverlays;
 
-public class NotificationPermissionManager {
+public class PermissionManager {
     private static final int PERMISSIONS_REQUEST_ACCESS_BOOT_COMPLETED = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION_COMPLETED = 2;
+    private static final int MULTIPLE_PERMISSIONS = 1;
 
     Context context;
     FragmentActivity fragmentActivity;
 
-    public NotificationPermissionManager(Context contextTmp) {
+    public PermissionManager(Context contextTmp) {
         context = contextTmp;
     }
 
-    public NotificationPermissionManager(Context contextTmp, FragmentActivity fragmentActivityTmp) {
+    public PermissionManager(Context contextTmp, FragmentActivity fragmentActivityTmp) {
         context = contextTmp;
         fragmentActivity = fragmentActivityTmp;
     }
@@ -67,7 +71,27 @@ public class NotificationPermissionManager {
         }
     }
 
-    public boolean checkAppUsagePermission() {
+
+    public static boolean checkPermissions(Activity activity) throws PackageManager.NameNotFoundException {
+        PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS);
+        String[] permissions = info.requestedPermissions;//This array contains the requested permissions.
+
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String permission : permissions) {
+            result = ContextCompat.checkSelfPermission(activity, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(permission);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean checkAppUsagePermission(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // access to the statistics of the device usage
             UsageStatsManager usm = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
@@ -85,7 +109,7 @@ public class NotificationPermissionManager {
     }
 
 
-    public void showAppUsageDialogPermission() {
+    public static void showAppUsageDialogPermission(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_permission, null);
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
@@ -122,7 +146,7 @@ public class NotificationPermissionManager {
 
     }
 
-    public boolean checkOverlayPermission() {
+    public static boolean checkOverlayPermission(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (!canDrawOverlays(context)) {
@@ -132,7 +156,7 @@ public class NotificationPermissionManager {
         return true;
     }
 
-    public void showOverlayDialogPermission() {
+    public static void showOverlayDialogPermission(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_permission, null);
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
@@ -223,44 +247,5 @@ public class NotificationPermissionManager {
         }
         return true;
     }
-/*
-    public void showNotificationDialogPermission() {
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_permission, null);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setCanceledOnTouchOutside(false);
-
-
-        TextView title = (TextView) view.findViewById(R.id.textViewPermission);
-        title.setText(context.getResources().getString(R.string.permission_dialog_notification));
-
-        ImageView icon = (ImageView) view.findViewById(R.id.iconPermission);
-        icon.setImageResource(R.drawable.notification_permission);
-
-        TextView yesButton = (TextView) view.findViewById(R.id.allow);
-        TextView noButton = (TextView) view.findViewById(R.id.deny);
-
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
-                alertDialog.dismiss();
-            }
-        });
-
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, context.getResources().getString(R.string.permission_dialog_notification), Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
-        });
-
-        alertDialog.setView(view);
-        alertDialog.show();
-        alertDialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
-
-
-    }
-*/
 }

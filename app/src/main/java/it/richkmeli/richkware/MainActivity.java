@@ -1,5 +1,8 @@
 package it.richkmeli.richkware;
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,30 +12,31 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.Random;
 
-import it.richkmeli.jframework.util.TypeConverter;
+import it.richkmeli.richkware.component.notification.NotificationManager;
+import it.richkmeli.richkware.component.notification.NotificationType;
 import it.richkmeli.richkware.component.smartNotification.SmartNotification;
-import it.richkmeli.richkware.permission.NotificationPermissionManager;
-import it.richkmeli.richkware.service.DeviceInfo;
-import it.richkmeli.richkware.service.ForegroundApp;
+import it.richkmeli.richkware.permission.PermissionManager;
+import it.richkmeli.richkware.service.ServiceManager;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
+import it.richkmeli.richkware.util.DeviceInfo;
 import it.richkmeli.richkware.util.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView device_id;
+    private TextView installation_id;
     private Button enableNotificationButton;
     private Button disableNotificationButton;
     private Button permissionButton;
     private Button systemWrite;
     private Button systemRead;
-    private Button foregroundApp;
-    private TextView device_id;
-    private TextView installation_id;
+    private Button startForegroundServices;
+    private Button stopForegroundServices;
+    private Button startBackgroundServices;
+    private Button stopBackgroundServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +49,15 @@ public class MainActivity extends AppCompatActivity {
         initializeTextview();
 
         checkSavedDeviceID();
-
     }
 
     private void checkSavedDeviceID() {
         String deviceID = DeviceInfo.getDeviceID(this);
         String savedDeviceID = StorageManager.read(this, StorageKey.DEVICE_ID);
-        if(!deviceID.equalsIgnoreCase(savedDeviceID)){
-            Toast.makeText(this, "DeviceID not equal!", Toast.LENGTH_LONG).show();
+        if (!deviceID.equalsIgnoreCase(savedDeviceID)) {
+            Toast.makeText(this, "DeviceID not equal", Toast.LENGTH_LONG).show();
         }
-        StorageManager.save(this,StorageKey.DEVICE_ID,deviceID);
+        StorageManager.save(this, StorageKey.DEVICE_ID, deviceID);
     }
 
     private void initializeTextview() {
@@ -76,15 +79,16 @@ public class MainActivity extends AppCompatActivity {
         permissionButton = findViewById(R.id.requestPermission);
         systemWrite = findViewById(R.id.system_write);
         systemRead = findViewById(R.id.system_read);
-        foregroundApp = findViewById(R.id.foreground_app);
+        startForegroundServices = findViewById(R.id.start_fg_services);
+        stopForegroundServices = findViewById(R.id.stop_fg_services);
+        startBackgroundServices = findViewById(R.id.start_bg_services);
+        stopBackgroundServices = findViewById(R.id.stop_bg_services);
 
         // set button listener
         enableNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.i("Enabling Notification");
-                Toast.makeText(view.getContext(), "Enabling Notification", Toast.LENGTH_LONG).show();
-
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Enabling Notification");
                 SmartNotification.show(getApplicationContext());
             }
         });
@@ -92,9 +96,7 @@ public class MainActivity extends AppCompatActivity {
         disableNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.i("Disabling Notification");
-                Toast.makeText(view.getContext(), "Disabling Notification", Toast.LENGTH_LONG).show();
-
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Disabling Notification");
                 SmartNotification.cancel(getApplicationContext());
             }
         });
@@ -102,15 +104,21 @@ public class MainActivity extends AppCompatActivity {
         permissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.i("Requesting permission");
-                Toast.makeText(view.getContext(), "Requesting permission", Toast.LENGTH_LONG).show();
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Requesting permission");
 
-                NotificationPermissionManager notificationPermissionManager = new NotificationPermissionManager(view.getContext());
-                if (!notificationPermissionManager.checkAppUsagePermission()) {
-                    notificationPermissionManager.showAppUsageDialogPermission();
+                Activity host = (Activity) view.getContext();
+                try {
+                    PermissionManager.checkPermissions(host);
+                } catch (PackageManager.NameNotFoundException e) {
+                    Logger.error(e);
                 }
-                if (!notificationPermissionManager.checkOverlayPermission()) {
-                    notificationPermissionManager.showOverlayDialogPermission();
+
+                PermissionManager notificationPermissionManager = new PermissionManager(view.getContext());
+                if (!PermissionManager.checkAppUsagePermission(view.getContext())) {
+                    PermissionManager.showAppUsageDialogPermission(view.getContext());
+                }
+                if (!PermissionManager.checkOverlayPermission(view.getContext())) {
+                    PermissionManager.showOverlayDialogPermission(view.getContext());
                 }
             }
         });
@@ -119,9 +127,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 StorageManager.save(view.getContext(), StorageKey.TEST, "" + new Random().nextInt());
-                Logger.i("saved");
-                Toast.makeText(view.getContext(), "saved", Toast.LENGTH_SHORT).show();
-
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "saved to file");
             }
         });
 
@@ -129,18 +135,41 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String s = StorageManager.read(view.getContext(), StorageKey.TEST);
-                Logger.i("Read, " + StorageKey.TEST + ": " + s);
-                Toast.makeText(view.getContext(), "Read, " + StorageKey.TEST + ": " + s, Toast.LENGTH_SHORT).show();
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, ("Read, " + StorageKey.TEST + ": " + s));
             }
         });
 
-        foregroundApp.setOnClickListener(new View.OnClickListener() {
+        startForegroundServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ForegroundApp foregroundApp = new ForegroundApp(view.getContext());
-                String app = foregroundApp.foregroundApp();
-                Logger.i("ForegroundApp: " + app);
-                Toast.makeText(view.getContext(), "ForegroundApp: " + app, Toast.LENGTH_SHORT).show();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    ServiceManager.startForegroundServices(view.getContext());
+                    NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Starting fg services");
+                }
+            }
+        });
+
+        stopForegroundServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ServiceManager.stopForegroundServices(view.getContext());
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Stopping fg services");
+            }
+        });
+
+        startBackgroundServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ServiceManager.startBackgroundServices(view.getContext());
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Starting bg services");
+            }
+        });
+
+        stopBackgroundServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ServiceManager.stopBackgroundServices(view.getContext());
+                NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Stopping bg services");
             }
         });
 

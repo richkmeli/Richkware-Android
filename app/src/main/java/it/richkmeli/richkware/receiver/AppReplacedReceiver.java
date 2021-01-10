@@ -5,18 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import it.richkmeli.richkware.component.notification.NotificationManager;
+import it.richkmeli.richkware.component.notification.NotificationType;
+
 public class AppReplacedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences setting = context.getSharedPreferences("setting", Context.MODE_PRIVATE);
-        if (setting.getBoolean("AppUsageEnabled", false)) {
-          /*  Intent serviceIntent = new Intent(context, AppUsageService.class);
-            context.startService(serviceIntent);
+        NotificationManager.notify(context, NotificationType.TOAST_SHORT,"Richkware: AppReplacedReceiver");
 
-            Intent locationIntent = new Intent(context, LocationService.class);
-            context.startService(locationIntent);*/
-        }
-
+        // TODO start services
 
         // call AlarmServicesManager periodically
         AlarmServicesManager.setAlarmFormASM(context);

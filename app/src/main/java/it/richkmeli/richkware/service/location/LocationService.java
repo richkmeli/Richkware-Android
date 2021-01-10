@@ -1,4 +1,4 @@
-package it.richkmeli.richkware.location;
+package it.richkmeli.richkware.service.location;
 
 
 import android.Manifest;
@@ -39,9 +39,10 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
-        if (locationThread != null)
+        if (locationThread != null) {
             // allow to the thread to be terminated
             locationThread.isEnded = true;
+        }
         stopLocalization();
         super.onDestroy();
     }

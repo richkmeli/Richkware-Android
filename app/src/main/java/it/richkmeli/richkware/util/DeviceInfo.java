@@ -1,4 +1,4 @@
-package it.richkmeli.richkware.service;
+package it.richkmeli.richkware.util;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -37,7 +37,7 @@ public class DeviceInfo {
                 switch (telephonyManager.getPhoneCount()) {
                     case 0:
                         // voice, sms, data not supported
-                        Logger.e("DeviceInfo: voice, sms, data not supported");
+                        Logger.error("DeviceInfo: voice, sms, data not supported");
                         break;
                     case 1:
                         // single sim
@@ -48,11 +48,11 @@ public class DeviceInfo {
                         deviceId = telephonyManager.getDeviceId(0) + telephonyManager.getDeviceId(1);
                         break;
                     default:
-                        Logger.e("DeviceInfo: getPhoneCount return an unexpected value");
+                        Logger.error("DeviceInfo: getPhoneCount return an unexpected value");
 
                 }
             } catch (SecurityException e) {
-                Logger.e("DeviceInfo", e);
+                Logger.error("DeviceInfo", e);
             }
         }
 
@@ -87,13 +87,13 @@ public class DeviceInfo {
                 if (!networkInterface.isLoopback() && !networkInterface.isVirtual() && !networkInterface.isPointToPoint()) {
                     if (networkInterface.getHardwareAddress() != null) {
                         hardwareAddressList.append(TypeConverter.bytesToHex(networkInterface.getHardwareAddress()));
-                        //Logger.i(networkInterface.getDisplayName() + ": " + TypeConverter.bytesToHex(networkInterface.getHardwareAddress()));
+                        //Logger.info(networkInterface.getDisplayName() + ": " + TypeConverter.bytesToHex(networkInterface.getHardwareAddress()));
                     }
                 }
             }
             networkID = hardwareAddressList.toString();
         } catch (SocketException e) {
-            Logger.e("DeviceInfo", e);
+            Logger.error("DeviceInfo", e);
         }
         return SHA256.hash(networkID);
     }

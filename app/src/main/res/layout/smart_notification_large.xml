@@ -13,6 +13,17 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/sn_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="0.25"
+            android:src="@mipmap/ic_launcher"
+            app:srcCompat="@mipmap/ic_launcher" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -21,6 +32,18 @@
             android:layout_weight="0.25"
             android:background="@color/cardview_light_background"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sn_title1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_toRightOf="@id/sn_icon"
+                android:layout_weight="0.4"
+                android:background="@color/azure"
+                android:text="title1"
+                android:textAlignment="center"
+                android:textColor="#000"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/sn_value1"
@@ -44,6 +67,18 @@
             android:layout_weight="0.25"
             android:background="@color/cardview_light_background"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sn_title2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_toRightOf="@id/sn_icon"
+                android:layout_weight="0.4"
+                android:background="@color/azure"
+                android:text="title2"
+                android:textAlignment="center"
+                android:textColor="#000"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/sn_value2"

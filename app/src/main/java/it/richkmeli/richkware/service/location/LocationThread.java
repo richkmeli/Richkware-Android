@@ -1,4 +1,4 @@
-package it.richkmeli.richkware.location;
+package it.richkmeli.richkware.service.location;
 
 
 import android.Manifest;

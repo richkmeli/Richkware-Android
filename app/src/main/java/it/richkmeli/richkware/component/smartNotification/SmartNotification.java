@@ -52,7 +52,7 @@ public class SmartNotification {
                             }
                         });
                     } else {
-                        Logger.e("NULL");
+                        Logger.error("NULL");
                     }*/
                     /*
                     Button test3 = findViewById(R.id.test);
@@ -64,7 +64,7 @@ public class SmartNotification {
                             }
                         });
                     }else{
-                        Logger.e("NULL");
+                        Logger.error("NULL");
                     }*/
                 }
             }, 2000);
@@ -103,20 +103,21 @@ public class SmartNotification {
 
         try {
 
-            RemoteViews remoteViews = createNSRemoteViews(context);
+            // Get the layouts to use in the custom notification
+            RemoteViews notificationLayout = createSnRemoteViews(context);
+            RemoteViews notificationLayoutExpanded = createSnExpandedRemoteViews(context);
 
 
             customNotification = new NotificationCompat.Builder(context, CHANNEL_ID)
                     //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                     //.setCustomContentView(layout)
-                    //.setContentTitle("Title")
-                    // .setContentText("content")
+                    //.setContentTitle("")
+                    //.setContentText("content")
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setCustomContentView(remoteViews)
-                    .setCustomBigContentView(remoteViews)
-                    .setCustomHeadsUpContentView(remoteViews)
-                    .setContent(remoteViews)
+                    //.setCustomContentView(notificationLayout)
+                    .setCustomBigContentView(notificationLayoutExpanded)
+                    //.setCustomHeadsUpContentView(remoteViews)
+                    .setContent(notificationLayoutExpanded)
                     //.addAction(R.drawable.com_facebook_close, "BUTTON 1", pi)
                     //  .setContentIntent(pi)
                     .setAutoCancel(false)
@@ -148,7 +149,30 @@ public class SmartNotification {
     }
 
 
-    private static RemoteViews createNSRemoteViews(Context context) {
+    private static RemoteViews createSnExpandedRemoteViews(Context context) {
+
+        // link layout
+        RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.smart_notification_large);
+        //contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
+        //contentView.setTextViewText(R.id.title, "Custom notification");
+        //contentView.setTextViewText(R.id.text, "This is a custom layout");
+
+        Uri uri = Uri.parse("http://google.com");
+        Intent button1 = new Intent(Intent.ACTION_VIEW, uri);
+        button1.setPackage("com.chrome.android");
+        PendingIntent openUrl = PendingIntent.getActivity(context, 0, button1, PendingIntent.FLAG_UPDATE_CURRENT);
+        contentView.setOnClickPendingIntent(R.id.sn_button1, openUrl);
+
+        Intent openRichkwareMainActivity = new Intent(context, MainActivity.class);
+        PendingIntent openApp = PendingIntent.getActivity(context, 0, openRichkwareMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+        contentView.setOnClickPendingIntent(R.id.sn_button2, openApp);
+
+        //TODO refresh, send intent to IntentService
+
+        return contentView;
+    }
+
+    private static RemoteViews createSnRemoteViews(Context context) {
 
         // link layout
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.smart_notification);

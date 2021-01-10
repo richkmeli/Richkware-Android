@@ -31,7 +31,7 @@ public class StorageManager {
             JSONObject newJsonObject = jsonObject.put(key.name(), value);
             saveToInternalFile(context, newJsonObject.toString());
         } catch (JSONException jsonException) {
-            Logger.e("", jsonException);
+            Logger.error("", jsonException);
         }
     }
 
@@ -49,10 +49,10 @@ public class StorageManager {
             if (jsonObject.has(key.name())) {
                 out = jsonObject.getString(key.name());
             } else {
-                Logger.e("key is not present in secureFile");
+                Logger.error("key is not present in secureFile");
             }
         } catch (JSONException jsonException) {
-            Logger.e("", jsonException);
+            Logger.error("", jsonException);
         }
         return out;
     }
@@ -65,7 +65,7 @@ public class StorageManager {
     private static String readFromInternalFile(Context context) {
         // external: /*getExternalFilesDir("test")*/
         String s = SecureFileManager.loadEncryptedDataFromFile(new File(context.getFilesDir(), FILE), SECRET_KEY);
-        Logger.i("StorageManager, read: " + s);
+        Logger.info("StorageManager, read: " + s);
         return s;
     }
 
@@ -76,7 +76,7 @@ public class StorageManager {
         try {
             encrypted = AES.encrypt(value, SECRET_KEY);
         } catch (CryptoException e) {
-            Logger.e("Error decrypting SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "'", e);
+            Logger.error("Error decrypting SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "'", e);
             return false;
         }
         editor.putString(STORAGE_MANAGER_SHARED_PREFERENCES, encrypted);
@@ -88,10 +88,10 @@ public class StorageManager {
         SharedPreferences sharedPrefs = context.getSharedPreferences(STORAGE_MANAGER_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         String encryptedData = sharedPrefs.getString(STORAGE_MANAGER_SHARED_PREFERENCES, null);
         if (encryptedData == null) {
-            Logger.e("encryptedData is null");
+            Logger.error("encryptedData is null");
             return encryptedData;
         } else if ("".equalsIgnoreCase(encryptedData)) {
-            Logger.e("SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "' is empty");
+            Logger.error("SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "' is empty");
             return encryptedData;
         } else {
             String decrypted = "";
@@ -100,7 +100,7 @@ public class StorageManager {
                 decrypted = AES.decrypt(encryptedData, SECRET_KEY);
                 return decrypted;
             } catch (CryptoException e) {
-                Logger.e("Error decrypting SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "'", e);
+                Logger.error("Error decrypting SharedPreferences '" + STORAGE_MANAGER_SHARED_PREFERENCES + "'", e);
                 return null;
             }
         }
