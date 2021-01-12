@@ -1,4 +1,4 @@
-package it.richkmeli.richkware.util;
+package it.richkmeli.richkware.system.device;
 
 import android.content.Context;
 import android.provider.Settings;

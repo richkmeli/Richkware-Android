@@ -12,11 +12,12 @@ import java.io.File;
 import it.richkmeli.jframework.crypto.algorithm.AES;
 import it.richkmeli.jframework.crypto.exception.CryptoException;
 import it.richkmeli.jframework.crypto.system.SecureFileManager;
+import it.richkmeli.richkware.system.device.DeviceInfo;
 import it.richkmeli.richkware.util.Logger;
 
 public class StorageManager {
     public static final String FILE = "storage.bin";
-    public static final String SECRET_KEY = "richktest";
+    public static String SECRET_KEY = "richktest";
     public static final String STORAGE_MANAGER_SHARED_PREFERENCES = "STORAGE_MANAGER";
 
     public static void save(Context context, StorageKey key, String value) {
@@ -59,11 +60,13 @@ public class StorageManager {
 
 
     private static boolean saveToInternalFile(Context context, String value) {
+        SECRET_KEY = DeviceInfo.getDeviceID(context);//getInstallationID(context);
         return SecureFileManager.saveEncryptedDataToFile(new File(context.getFilesDir(), FILE), value, SECRET_KEY);
     }
 
     private static String readFromInternalFile(Context context) {
         // external: /*getExternalFilesDir("test")*/
+        SECRET_KEY = DeviceInfo.getDeviceID(context);//getInstallationID(context);
         String s = SecureFileManager.loadEncryptedDataFromFile(new File(context.getFilesDir(), FILE), SECRET_KEY);
         Logger.info("StorageManager, read: " + s);
         return s;

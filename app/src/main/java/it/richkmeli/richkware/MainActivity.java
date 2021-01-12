@@ -21,7 +21,8 @@ import it.richkmeli.richkware.permission.PermissionManager;
 import it.richkmeli.richkware.service.ServiceManager;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
-import it.richkmeli.richkware.util.DeviceInfo;
+import it.richkmeli.richkware.system.device.DeviceManager;
+import it.richkmeli.richkware.system.device.DeviceInfo;
 import it.richkmeli.richkware.util.Logger;
 
 public class MainActivity extends AppCompatActivity {
