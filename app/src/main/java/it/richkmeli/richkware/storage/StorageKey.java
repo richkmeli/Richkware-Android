@@ -1,5 +1,5 @@
 package it.richkmeli.richkware.storage;
 
 public enum StorageKey {
-    DEVICE_ID, INSTALLATION_ID, TEST;
+    RND_TEST,DEVICE_ID, INSTALLATION_ID, NETWORK_PROTOCOL, NETWORK_SERVER, NETWORK_SERVICE;
 }

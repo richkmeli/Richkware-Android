@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -95,6 +96,7 @@
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
@@ -108,14 +110,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/requestPermission"
+            android:id="@+id/requestStandardPermission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Request"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Request standard"
+            app:layout_constraintEnd_toStartOf="@+id/requestCriticalPermission"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <Button
+            android:id="@+id/requestCriticalPermission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request critical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/requestStandardPermission"
+            app:layout_constraintTop_toTopOf="@+id/requestStandardPermission" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -141,8 +151,7 @@
             android:id="@+id/system_write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Write"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Write to file"
             app:layout_constraintEnd_toStartOf="@+id/system_read"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -151,8 +160,7 @@
             android:id="@+id/system_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Read"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Read from file"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/system_write"
             app:layout_constraintTop_toTopOf="@+id/system_write" />
@@ -180,7 +188,6 @@
             android:id="@+id/start_fg_services"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="41dp"
             android:text="start fg services"
             app:layout_constraintEnd_toStartOf="@+id/stop_fg_services"
             app:layout_constraintStart_toStartOf="parent"
@@ -199,7 +206,6 @@
             android:id="@+id/start_bg_services"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
             android:text="start bg services"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/stop_bg_services"
@@ -217,5 +223,91 @@
             app:layout_constraintTop_toTopOf="@+id/start_bg_services" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout7"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Network"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/upload_info_to_rms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UploadInfoToRMS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/service_edittext" />
+
+    <Spinner
+        android:id="@+id/protocol_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/protocol"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintStart_toStartOf="@+id/server_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+
+    <EditText
+        android:id="@+id/server_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="10.0.2.2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="@+id/service_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/protocol_spinner" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Protocol: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/protocol_spinner" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/server_edittext" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/server_edittext" />
+
+    <EditText
+        android:id="@+id/service_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Richkware-Manager-Server"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/server_edittext" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

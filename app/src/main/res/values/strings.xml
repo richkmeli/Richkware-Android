@@ -35,4 +35,8 @@
 
     <string name="title_activity_main">Richkware</string>
 
+    <string-array name="protocol">
+        <item>HTTP</item>
+        <item>HTTPS</item>
+    </string-array>
 </resources>
