@@ -39,4 +39,9 @@
         <item>HTTP</item>
         <item>HTTPS</item>
     </string-array>
+
+    <string-array name="network_services">
+        <item>UploadInfoToRms</item>
+        <item>GetEncryptionKeyFromRMS</item>
+    </string-array>
 </resources>

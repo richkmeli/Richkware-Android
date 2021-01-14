@@ -59,7 +59,7 @@ public class NetworkManager {
         }
     }
 
-    public void GetEncryptionKeyFromRMS(Context context, RichkwareCallback callback) {
+    public void getEncryptionKeyFromRMS(Context context, RichkwareCallback callback) {
         try {
             getUrlFromSetting(context);
 

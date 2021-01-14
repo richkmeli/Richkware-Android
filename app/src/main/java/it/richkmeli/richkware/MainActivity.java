@@ -36,20 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView device_id;
     private TextView installation_id;
+    // notification
     private Button enableNotificationButton;
     private Button disableNotificationButton;
+    // permission
     private Button requestStandardPermissionButton;
     private Button requestCriticalPermissionButton;
+    // storage
     private Button writeToFile;
     private Button readFromFile;
+    // services
     private Button startForegroundServices;
     private Button stopForegroundServices;
     private Button startBackgroundServices;
     private Button stopBackgroundServices;
-    private Button uploadInfoToRms;
+    // network
     private Spinner protocolSpinner;
     private EditText serverEditText;
     private EditText serviceEditText;
+    private Spinner networkSpinner;
+    private Button networkExecute;
+    private TextView networkOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +83,12 @@ public class MainActivity extends AppCompatActivity {
     private void initializeTextview() {
         device_id = findViewById(R.id.device_id);
         installation_id = findViewById(R.id.installation_id);
+
         protocolSpinner = findViewById(R.id.protocol_spinner);
         serverEditText = findViewById(R.id.server_edittext);
         serviceEditText = findViewById(R.id.service_edittext);
+        networkSpinner = findViewById(R.id.network_service_spinner);
+        networkOutput = findViewById(R.id.network_output);
 
         // set text view value
         String deviceID = DeviceInfo.getDeviceID(this);
@@ -134,6 +144,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        networkSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                StorageManager.save(adapterView.getContext(), StorageKey.NETWORK_APPLICATION_SERVICE, networkSpinner.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
 
     private void initializeButtons() {
@@ -147,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         stopForegroundServices = findViewById(R.id.stop_fg_services);
         startBackgroundServices = findViewById(R.id.start_bg_services);
         stopBackgroundServices = findViewById(R.id.stop_bg_services);
-        uploadInfoToRms = findViewById(R.id.upload_info_to_rms);
+        networkExecute = findViewById(R.id.network_execute);
 
         // set button listener
         enableNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -248,23 +271,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        uploadInfoToRms.setOnClickListener(new View.OnClickListener() {
+        RichkwareCallback richkwareCallback = new RichkwareCallback() {
             @Override
-            public void onClick(View view) {
-                NetworkManager networkManager = new NetworkManager();
-                networkManager.uploadInfoToRms(view.getContext(), new RichkwareCallback() {
+            public void onSuccess(String response) {
+                //NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Success");
+                Logger.info(response);
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onSuccess(String response) {
-                        //NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Success");
-                        Logger.info(response);
-                    }
-
-                    @Override
-                    public void onFailure(String response) {
-                        //NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Failed");
-                        Logger.error(response);
+                    public void run() {
+                        networkOutput.setText(response);
                     }
                 });
+            }
+
+            @Override
+            public void onFailure(String response) {
+                //NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Failed");
+                Logger.error(response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        networkOutput.setText(response);
+                    }
+                });
+            }
+        };
+
+        networkExecute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String service = StorageManager.read(view.getContext(), StorageKey.NETWORK_APPLICATION_SERVICE);
+
+                NetworkManager networkManager = new NetworkManager();
+
+                switch (service){
+                    case "UploadInfoToRms":
+                        networkManager.uploadInfoToRms(view.getContext(), richkwareCallback);
+                        break;
+                    case "GetEncryptionKeyFromRMS":
+                        networkManager.getEncryptionKeyFromRMS(view.getContext(), richkwareCallback);
+                    default:
+                        NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "service " +service + " not present in switch");
+                }
 
             }
         });
