@@ -310,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "GetEncryptionKeyFromRMS":
                         networkManager.getEncryptionKeyFromRMS(view.getContext(), richkwareCallback);
+                        break;
                     default:
                         NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "service " +service + " not present in switch");
                 }

