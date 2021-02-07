@@ -5,8 +5,6 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.Handler;
 
-import java.util.ArrayList;
-
 import it.richkmeli.richkware.component.notification.NotificationManager;
 import it.richkmeli.richkware.component.notification.NotificationType;
 import it.richkmeli.richkware.permission.PermissionManager;

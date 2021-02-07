@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import it.richkmeli.richkware.R;
 import it.richkmeli.richkware.permission.PermissionManager;
-import it.richkmeli.richkware.service.location.LocationService;
 import it.richkmeli.richkware.util.Logger;
 
 public class NotificationManager {
@@ -25,7 +24,7 @@ public class NotificationManager {
     public static void notify(Context context, NotificationType notificationType, String text) {
         PackageManager packageManager = context.getPackageManager();
         if (PermissionManager.checkOverlayPermission(context)) {
-            Logger.info("NotificationManager, type: " + notificationType.name()+ ", text: " + text);
+            Logger.info("NotificationManager, type: " + notificationType.name() + ", text: " + text);
             switch (notificationType) {
                 case TOAST_SHORT: {
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
@@ -73,7 +72,7 @@ public class NotificationManager {
                     alertDialog.setView(view);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-                    }else {
+                    } else {
                         alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                     }
                     alertDialog.show();

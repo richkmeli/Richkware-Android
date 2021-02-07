@@ -1,6 +1,6 @@
 package it.richkmeli.richkware.network;
 
-public interface RichkwareCallback{
+public interface RichkwareCallback {
 
     void onSuccess(String response);
 

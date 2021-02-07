@@ -1,18 +1,15 @@
 package it.richkmeli.richkware.service;
 
-import android.app.IntentService;
-import android.app.Notification;
-import android.app.PendingIntent;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import it.richkmeli.richkware.BuildConfig;
-import it.richkmeli.richkware.R;
 import it.richkmeli.richkware.service.location.LocationService;
 import it.richkmeli.richkware.service.monitor.ScanAppUsageFgService;
+import it.richkmeli.richkware.util.Logger;
 
 public class ServiceManager {
     public static Intent[] backgroundServiceList;
@@ -20,9 +17,11 @@ public class ServiceManager {
 
 
     private static void init(Context context) {
-        backgroundServiceList = new Intent[]{new Intent(context, ThreadManager.class),
-                new Intent(context, LocationService.class)};
-        foregroundServiceList = new Intent[]{new Intent(context, ScanAppUsageFgService.class)};
+        backgroundServiceList =
+                new Intent[]{new Intent(context, ThreadManager.class),
+                        new Intent(context, LocationService.class)};
+        foregroundServiceList =
+                new Intent[]{new Intent(context, ScanAppUsageFgService.class)};
     }
 
     public static void startBackgroundServices(Context context) {
@@ -31,6 +30,7 @@ public class ServiceManager {
             context.startService(service);
         }
     }
+
     public static void stopBackgroundServices(Context context) {
         init(context);
         for (Intent service : backgroundServiceList) {
@@ -46,10 +46,33 @@ public class ServiceManager {
             context.startForegroundService(service);
         }
     }
+
     public static void stopForegroundServices(Context context) {
         init(context);
         for (Intent service : foregroundServiceList) {
             context.stopService(service);
         }
     }
+
+    public static void startServiceIfNotAlive(Context context, Class service) {
+        boolean alive = false;
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (service != null) {
+                if (serviceInfo.service.getClassName().compareTo(service.getName()) == 0) {
+                    Logger.info("service is alive");
+                    alive = true;
+                } else {
+                    Logger.info("service is stopped");
+                }
+            }
+        }
+
+        if (!alive) {
+            Intent serviceIntent = new Intent(context, service);
+            context.startService(serviceIntent);
+        }
+
+    }
+
 }

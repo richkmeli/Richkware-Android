@@ -14,6 +14,13 @@ import android.os.IBinder;
 
 import androidx.core.app.ActivityCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import it.richkmeli.richkware.storage.StorageKey;
+import it.richkmeli.richkware.storage.StorageManager;
+import it.richkmeli.richkware.util.Logger;
+
 public class LocationService extends Service implements LocationListener {
     private static LocationManager locationManager;
     private LocationThread locationThread;
@@ -50,7 +57,20 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        JSONObject locationData = new JSONObject();
+        try {
+            locationData.put("latitude", location.getLatitude());
+            locationData.put("longitude", location.getLongitude());
+            locationData.put("accuracy", (int) location.getAccuracy());
+            locationData.put("altitude", (int) location.getAltitude());
+            locationData.put("provider", location.getProvider());
+            locationData.put("isMock", location.isFromMockProvider());
+        } catch (JSONException jsonException) {
+            Logger.error(jsonException);
+        }
+        StorageManager.save(getApplicationContext(),
+                StorageKey.LOCATION, locationData.toString());
+        Logger.info(locationData.toString());
     }
 
     @Override

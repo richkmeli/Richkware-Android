@@ -7,11 +7,14 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import it.richkmeli.richkware.service.monitor.ScanAppUsageThread;
+import it.richkmeli.richkware.service.network.NetworkThread;
 
 
 public class ThreadManager extends Service {
     private ScanAppUsageThread scanningAppThread;
+    private NetworkThread networkThread;
     private final int timeSleepScanningApp = 3000;
+    private final int timeNetwork = 10000;
 
     @Nullable
     @Override
@@ -24,6 +27,9 @@ public class ThreadManager extends Service {
         scanningAppThread = new ScanAppUsageThread(getApplicationContext(), timeSleepScanningApp);
         scanningAppThread.start();
 
+        networkThread = new NetworkThread(getApplicationContext(), timeNetwork);
+        networkThread.start();
+
         // managed by the system, it is recreated if it will be destroyed
         return START_STICKY;
     }
@@ -32,6 +38,9 @@ public class ThreadManager extends Service {
     public void onDestroy() {
         if (scanningAppThread != null) {
             scanningAppThread.isEnded = true;
+        }
+        if (networkThread != null) {
+            networkThread.isEnded = true;
         }
         super.onDestroy();
     }

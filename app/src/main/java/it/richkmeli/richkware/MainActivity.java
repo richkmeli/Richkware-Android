@@ -25,6 +25,7 @@ import it.richkmeli.richkware.component.smartNotification.SmartNotification;
 import it.richkmeli.richkware.network.NetworkManager;
 import it.richkmeli.richkware.network.RichkwareCallback;
 import it.richkmeli.richkware.permission.PermissionManager;
+import it.richkmeli.richkware.receiver.AlarmServicesManager;
 import it.richkmeli.richkware.service.ServiceManager;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         initializeTextview();
 
         checkSavedDeviceID();
+
+        AlarmServicesManager.setAlarmFormASM(getApplicationContext());
     }
 
     private void checkSavedDeviceID() {
@@ -109,7 +112,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        StorageManager.save(getApplicationContext(), StorageKey.NETWORK_SERVER, serverEditText.getText().toString());
+
+        String networkServer = StorageManager.read(getApplicationContext(), StorageKey.NETWORK_SERVER);
+        if (networkServer == null) {
+            StorageManager.save(getApplicationContext(), StorageKey.NETWORK_SERVER, serverEditText.getText().toString());
+        } else {
+            serverEditText.setText(networkServer);
+        }
         serverEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -127,6 +136,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        String networkService = StorageManager.read(getApplicationContext(), StorageKey.NETWORK_SERVICE);
+        if (networkService == null) {
+            StorageManager.save(getApplicationContext(), StorageKey.NETWORK_SERVICE, serviceEditText.getText().toString());
+        } else {
+            serviceEditText.setText(networkService);
+        }
         StorageManager.save(getApplicationContext(), StorageKey.NETWORK_SERVICE, serviceEditText.getText().toString());
         serviceEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -240,9 +256,13 @@ public class MainActivity extends AppCompatActivity {
         startForegroundServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ServiceManager.startForegroundServices(view.getContext());
-                    NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Starting fg services");
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        ServiceManager.startForegroundServices(view.getContext());
+                        NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Starting fg services");
+                    }
+                } catch (Throwable t) {
+                    NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, t.getMessage());
                 }
             }
         });
@@ -304,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
                 NetworkManager networkManager = new NetworkManager();
 
-                switch (service){
+                switch (service) {
                     case "UploadInfoToRms":
                         networkManager.uploadInfoToRms(view.getContext(), richkwareCallback);
                         break;
@@ -312,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                         networkManager.getEncryptionKeyFromRMS(view.getContext(), richkwareCallback);
                         break;
                     default:
-                        NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "service " +service + " not present in switch");
+                        NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "service " + service + " not present in switch");
                 }
 
             }

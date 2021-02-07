@@ -20,7 +20,7 @@ public class Logger extends it.richkmeli.jframework.util.log.Logger {
 
     public static void error(String message, Throwable throwable) {
         debug = BuildConfig.DEBUG;
-        it.richkmeli.jframework.util.log.Logger.error(message,throwable);
+        it.richkmeli.jframework.util.log.Logger.error(message, throwable);
     }
 
     public static void error(Throwable throwable) {

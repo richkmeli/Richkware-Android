@@ -107,6 +107,8 @@
                 <action android:name="android.intent.action.BATTERY_OKAY"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.AlarmServicesManager">
+    </receiver>
 
         <service
             android:name=".component.smartNotification.SNIntentService"
