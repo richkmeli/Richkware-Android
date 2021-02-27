@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -284,7 +285,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="10.0.2.2"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/discover"
                 app:layout_constraintStart_toStartOf="@+id/protocol_spinner"
                 app:layout_constraintTop_toBottomOf="@+id/protocol_spinner" />
 
@@ -333,6 +334,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/network_execute" />
+
+            <Button
+                android:id="@+id/discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/server_edittext" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

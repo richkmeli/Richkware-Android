@@ -1,11 +1,16 @@
 package it.richkmeli.richkware.network;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import it.richkmeli.jframework.crypto.algorithm.RC4;
+import it.richkmeli.jframework.network.scan.NetworkScanner;
 import it.richkmeli.jframework.network.tcp.client.okhttp.Network;
 import it.richkmeli.jframework.network.tcp.client.okhttp.NetworkCallback;
 import it.richkmeli.jframework.network.tcp.client.okhttp.NetworkException;
@@ -16,6 +21,8 @@ import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
 import it.richkmeli.richkware.system.device.DeviceInfo;
 import it.richkmeli.richkware.util.Logger;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NetworkManager {
     private Network network;
@@ -99,6 +106,58 @@ public class NetworkManager {
         }
     }
 
+    public void getStatus(Context context, String server) {
+        try {
+            String protocol = StorageManager.read(context, StorageKey.NETWORK_PROTOCOL);
+            String port = protocol.equalsIgnoreCase("HTTPS") ? "443" : "8080";
+            String service = StorageManager.read(context, StorageKey.NETWORK_SERVICE);
+
+            String server2 = server;
+            if (server.contains("(") && server.contains(")")) {
+                server2 = server.substring(server.indexOf("(") + 1, server.indexOf(")"));
+            }
+            Logger.info(server2);
+            network.setURL(protocol, server2, port, service);
+
+
+            final String finalServer = server2;
+            network.getRequest("status", "", "", null, false, new NetworkCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    try {
+                        if (ResponseParser.isStatusOK(response)) {
+                            if ("UP".equalsIgnoreCase(ResponseParser.parseMessage(response))) {
+                                StorageManager.save(context, StorageKey.NETWORK_SERVER, finalServer);
+                                String message = "RMS server: " + finalServer + " found";
+                                Logger.info(message);
+                                //NotificationManager.notify(context, NotificationType.TOAST_SHORT, "RMS server: " + finalServer + " found");
+                            }
+                        }
+                    } catch (JSONException e) {
+                        // if this network call is in a thread do not use toast messages
+                        Logger.error(e);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                }
+            });
+        } catch (Exception e) {
+            // if this network call is in a thread do not use toast messages
+            Logger.error(e);
+        }
+    }
+
+    // call every active host and replace server configuration with the active rms server
+    public static void discoverRmsInLocalNetwork(Context context) {
+        List<String> activeHosts = NetworkScanner.getActiveHosts("192.168.0");
+        NetworkManager networkManager = new NetworkManager();
+        for (String activehost : activeHosts) {
+            networkManager.getStatus(context, activehost);
+        }
+    }
+
     private void getUrlFromSetting(Context context) throws NetworkException {
         String protocol = StorageManager.read(context, StorageKey.NETWORK_PROTOCOL);
         String port = protocol.equalsIgnoreCase("HTTPS") ? "443" : "8080";
@@ -106,4 +165,16 @@ public class NetworkManager {
         String service = StorageManager.read(context, StorageKey.NETWORK_SERVICE);
         network.setURL(protocol, server, port, service);
     }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    public static NetworkInfo getNetworkInfo(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo();
+    }
+
 }

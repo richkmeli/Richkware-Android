@@ -8,6 +8,8 @@ import android.os.Handler;
 import it.richkmeli.richkware.component.notification.NotificationManager;
 import it.richkmeli.richkware.component.notification.NotificationType;
 import it.richkmeli.richkware.permission.PermissionManager;
+import it.richkmeli.richkware.storage.StorageKey;
+import it.richkmeli.richkware.storage.StorageManager;
 import it.richkmeli.richkware.system.application.ForegroundApp;
 import it.richkmeli.richkware.util.Logger;
 
@@ -39,7 +41,8 @@ public class ScanAppUsageThread extends Thread {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            NotificationManager.notify(context, NotificationType.TOAST_SHORT, foregroundApp);
+                            //NotificationManager.notify(context, NotificationType.TOAST_SHORT, foregroundApp);
+                            // TODO save into file?
                         }
                     });
                 } else {

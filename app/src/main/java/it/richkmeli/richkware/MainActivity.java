@@ -27,11 +27,14 @@ import it.richkmeli.richkware.network.RichkwareCallback;
 import it.richkmeli.richkware.permission.PermissionManager;
 import it.richkmeli.richkware.receiver.AlarmServicesManager;
 import it.richkmeli.richkware.service.ServiceManager;
+import it.richkmeli.richkware.service.network.DiscoverThread;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
 import it.richkmeli.richkware.system.device.DeviceInfo;
 import it.richkmeli.richkware.system.device.DeviceManager;
 import it.richkmeli.richkware.util.Logger;
+
+import static android.net.ConnectivityManager.TYPE_WIFI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner networkSpinner;
     private Button networkExecute;
     private TextView networkOutput;
+    private Button discover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkSavedDeviceID();
 
+        // Start Threads
         AlarmServicesManager.setAlarmFormASM(getApplicationContext());
     }
 
@@ -187,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
         startBackgroundServices = findViewById(R.id.start_bg_services);
         stopBackgroundServices = findViewById(R.id.stop_bg_services);
         networkExecute = findViewById(R.id.network_execute);
+        discover = findViewById(R.id.discover);
 
         // set button listener
         enableNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -335,6 +341,20 @@ public class MainActivity extends AppCompatActivity {
                         NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "service " + service + " not present in switch");
                 }
 
+            }
+        });
+
+        discover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(NetworkManager.getNetworkInfo(getApplicationContext()).getType() == TYPE_WIFI) {
+                    DiscoverThread discoverThread = new DiscoverThread(getApplicationContext());
+                    discoverThread.start();
+
+                    serverEditText.setText(StorageManager.read(getApplicationContext(), StorageKey.NETWORK_SERVER));
+                }else {
+                    NotificationManager.notify(view.getContext(), NotificationType.TOAST_SHORT, "Your are not in a WIFI network");
+                }
             }
         });
 
