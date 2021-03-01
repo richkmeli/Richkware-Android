@@ -150,7 +150,7 @@ public class NetworkManager {
     }
 
     // call every active host and replace server configuration with the active rms server
-    public static void discoverRmsInLocalNetwork(Context context) {
+    public static void rmsLocalNetworkDiscovery(Context context) {
         List<String> activeHosts = NetworkScanner.getActiveHosts("192.168.0");
         NetworkManager networkManager = new NetworkManager();
         for (String activehost : activeHosts) {

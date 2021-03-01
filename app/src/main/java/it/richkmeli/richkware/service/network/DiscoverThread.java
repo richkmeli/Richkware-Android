@@ -4,7 +4,6 @@ package it.richkmeli.richkware.service.network;
 import android.content.Context;
 
 import it.richkmeli.richkware.network.NetworkManager;
-import it.richkmeli.richkware.network.RichkwareCallback;
 import it.richkmeli.richkware.util.Logger;
 
 public class DiscoverThread extends Thread {
@@ -27,7 +26,7 @@ public class DiscoverThread extends Thread {
     public void run() {
 
         while (!isEnded) {
-            NetworkManager.discoverRmsInLocalNetwork(context);
+            NetworkManager.rmsLocalNetworkDiscovery(context);
             try {
                 sleep(timeSleep);
             } catch (InterruptedException e) {

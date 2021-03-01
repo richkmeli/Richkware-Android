@@ -3,6 +3,11 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        cert {
+        }
+    }
+
     /*signingConfigs {
         release {
             keyAlias 'richk'
@@ -45,10 +50,6 @@ android {
                 minifyEnabled false
             }
         }
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
 
         packagingOptions {
             //exclude 'configuration.properties'
@@ -63,6 +64,11 @@ android {
             exclude("META-INF/*.kotlin_module")
         }
 
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dependencies {
@@ -88,6 +94,7 @@ android {
         implementation 'com.android.support:multidex:1.0.3'
         implementation 'com.android.support:support-v4:29.0.0'
         implementation 'com.android.support:cardview-v7:29.0.0'
-        implementation 'com.github.richkmeli.jframework:network:1.2.6'
+        implementation 'com.github.richkmeli.JFramework:network:1.2.12'
+        //implementation 'it.richkmeli.jframework:network:1.2.11'
     }
 }
