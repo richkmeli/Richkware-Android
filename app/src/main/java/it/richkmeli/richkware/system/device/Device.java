@@ -4,6 +4,9 @@ import android.content.Context;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
@@ -15,7 +18,7 @@ import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
 import it.richkmeli.richkware.util.Logger;
 
-public class DeviceInfo {
+public class Device {
     private static String installationID = null;
 
     public static String getDeviceID(Context context) {
@@ -96,5 +99,19 @@ public class DeviceInfo {
             Logger.error("DeviceInfo", e);
         }
         return SHA256.hash(networkID);
+    }
+
+    public static String getDeviceInfo(){
+        JSONObject deviceInfo = new JSONObject();
+        try {
+            deviceInfo.put("os_version", System.getProperty("os.version") + "(" + android.os.Build.VERSION.INCREMENTAL + ")");
+            deviceInfo.put("os_api_level", android.os.Build.VERSION.SDK_INT);
+            deviceInfo.put("device", android.os.Build.DEVICE); //The name of the industrial design.
+            deviceInfo.put("brand", android.os.Build.BRAND + " ("+ android.os.Build.PRODUCT + ")");
+            deviceInfo.put("model_product", android.os.Build.MODEL + " ("+ android.os.Build.PRODUCT + ")");
+        } catch (JSONException jsonException) {
+            Logger.error(jsonException);
+        }
+        return deviceInfo.toString();
     }
 }

