@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Richkware</string>
+
+    <!-- RECEIVER__________________________________________________________________-->
+    <string name="receiver_toast_download_success">Download : Success</string>
+    <string name="receiver_toast_download_failed">Download : Failed</string>
+    <!-- ______________________________________________________________________________ -->
+
+    <!-- PERMISSION__________________________________________________________________-->
+    <string name="deny">deny</string>
+    <string name="allow">allow</string>
+    <string name="permission_toast_boot_not_grated">Boot Completed Permissions Not Granted!</string>
+    <string name="permission_dialog_title">Permission</string>
+    <string name="permission_dialog_app_usage">Allow me to track your usage?</string>
+    <string name="permission_toast_app_usage_not_grated">Without permissions I will lose some features</string>
+    <string name="permission_dialog_overdraw">Allow me to show notification over other app?</string>
+    <string name="permission_toast_overdraw_not_grated">Without permissions, I will lose some notifications features</string>
+    <string name="permission_dialog_boot">The Application needs to know when you boot your phone to works properly! Check System Setting to grant access!</string>
+    <string name="permission_dialog_notification">Allow mw to track your notifications?</string>
+    <string name="permission_toast_notification_not_grated">Without permissions, I will lose some notice features</string>
+    <string name="permission_dialog_location">Allow me to use location to use Maps Functions</string>
+    <!-- ______________________________________________________________________________ -->
+    <string name="overlay_permission_settings">Check the overlay permission</string>
+    <string name="usage_permission_settings">Check the usage permission</string>
+    <string name="notification_permission_settings">Check the notifications permission</string>
+    <string name="granted_permission">Permission Granted</string>
+    <string name="notification_permission_concede">Thanks to this permission I can Monitor the notifications for more accuracy</string>
+    <string name="usage_permission_concede">Thank to this permission I can track the others applications</string>
+    <string name="overlay_permission_concede">Thank to this permission I can notify in the right way</string>
+
+    <!-- WIDGET__________________________________________________________________-->
+    <string name="appwidget_text">Richkware</string>
+    <string name="add_widget">Add widget</string>
+    <!-- ______________________________________________________________________________ -->
+
+    <string name="title_activity_main">Richkware</string>
+
+    <string-array name="protocol">
+        <item>HTTP</item>
+        <item>HTTPS</item>
+    </string-array>
+
+    <string-array name="network_services">
+        <item>UploadInfoToRms</item>
+        <item>GetEncryptionKeyFromRMS</item>
+    </string-array>
+</resources>

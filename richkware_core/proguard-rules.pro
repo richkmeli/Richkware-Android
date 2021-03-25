@@ -20,6 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepclassmembers class it.richkmeli.richkware.demo.BuildConfig {
+-keepclassmembers class it.richkmeli.richkware.BuildConfig {
    public *;
 }

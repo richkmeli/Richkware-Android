@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Richkware theme -->
+    <color name="richkware_colorPrimary">#5AD219</color>
+    <color name="richkware_colorPrimaryDark">#2A9B01</color>
+    <color name="richkware_colorAccent">#35D219</color>
+    <color name="richkware_colorBackground">#FFFFFF</color>
+    <color name="richkware_colorCardBackground">#73FF40</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+
+    <color name="bright_pink">#FF007F</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#ff7f00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="chartreuse">#7FFF00</color>
+    <color name="green">#00FF00</color>
+    <color name="spring_green">#bff9b5</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="azure">#007fff</color>
+    <color name="blue">#0000FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="gray">#7A7A7A</color>
+</resources>
